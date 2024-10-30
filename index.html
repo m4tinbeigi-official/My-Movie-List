@@ -71,15 +71,15 @@
     document.addEventListener('DOMContentLoaded', function() {
       const apiKey = 'b86e5c82'; // Your OMDB API key
       const movieTitles = [
-        { title: "The Banshees of Inisherin", year: 2022, rating: "7.8", id: "tt11813216" },
-        { title: "The Worst Person in the World", year: 2021, rating: "7.8", id: "tt10365998" },
-        { title: "(500) Days of Summer", year: 2009, rating: "7.7", id: "tt1022603" },
-        { title: "The Imagineering Story", year: 2019, rating: "8.9", id: "tt9331982" },
-        { title: "Roqya", year: 2023, rating: "N/A", id: "N/A" },
-        { title: "Blink Twice", year: 2023, rating: "N/A", id: "N/A" },
-        { title: "Sweet November", year: 2001, rating: "N/A", id: "tt0230838" },
-        { title: "Three Steps Above Heaven", year: 2010, rating: "N/A", id: "tt1648216" },
-        { title: "Gloomy Sunday", year: 1999, rating: "N/A", id: "tt0155722" }
+        { title: "The Banshees of Inisherin", year: 2022, rating: "7.8", id: "tt11813216", downloadLink: "https://berlin.saymyname.website/Movies/2022/11813216/" },
+        { title: "The Worst Person in the World", year: 2021, rating: "7.8", id: "tt10365998", downloadLink: "https://tokyo.saymyname.website/Movies/2021/10370710/" },
+        { title: "(500) Days of Summer", year: 2009, rating: "7.7", id: "tt1022603", downloadLink: "https://tokyo.saymyname.website/Movies/2009/1022603/" },
+        { title: "The Imagineering Story", year: 2019, rating: "8.9", id: "tt10167434", downloadLink: "https://example.com/imagineering-download" },
+        { title: "Roqya", year: 2023, rating: "N/A", id: "N/A", downloadLink: "#" },
+        { title: "Blink Twice", year: 2023, rating: "N/A", id: "tt14858658", downloadLink: "https://berlin.saymyname.website/Movies/2024/14858658/" },
+        { title: "Sweet November", year: 2001, rating: "N/A", id: "tt0230838", downloadLink: "https://tokyo.saymyname.website/Movies/2001/0230838/" },
+        { title: "Three Steps Above Heaven", year: 2010, rating: "N/A", id: "tt1648216", downloadLink: "https://tokyo.saymyname.website/Movies/2010/1648216/" },
+        { title: "Gloomy Sunday", year: 1999, rating: "N/A", id: "tt0155722", downloadLink: "https://berlin.saymyname.website/Movies/1999/0155722/" }
       ];
 
       const moviesList = document.getElementById('movies-list');
@@ -89,7 +89,6 @@
           fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${movie.id}&plot=short&r=json`)
             .then(response => response.json())
             .then(data => {
-              console.log(data); // For debugging purposes
               if (data.Response === "True") {
                 const movieItem = `
                   <div class="movie-item">
@@ -98,7 +97,7 @@
                       <div class="movie-title">${data.Title} (${data.Year})</div>
                       <div>IMDb Rating: ${data.imdbRating !== "N/A" ? data.imdbRating : "Unavailable"}</div>
                     </div>
-                    <a href="#" class="btn btn-primary btn-sm download-btn">Download</a>
+                    <a href="${movie.downloadLink}" class="btn btn-primary btn-sm download-btn">Download</a>
                   </div>
                 `;
                 moviesList.innerHTML += movieItem;
@@ -118,7 +117,7 @@
                 <div class="movie-title">${movie.title} (${movie.year})</div>
                 <div>IMDb Rating: ${movie.rating}</div>
               </div>
-              <a href="#" class="btn btn-primary btn-sm download-btn">Download</a>
+              <a href="${movie.downloadLink}" class="btn btn-primary btn-sm download-btn">Download</a>
             </div>
           `;
           moviesList.innerHTML += movieItem;
