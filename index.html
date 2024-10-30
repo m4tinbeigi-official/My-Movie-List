@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Movie List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f3f3f3;
+      color: #333;
+    }
+    .navbar {
+      background-color: #f5c518;
+      padding: 1rem;
+    }
+    .navbar h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #000;
+    }
+    .movie-list {
+      padding: 1rem;
+      margin: 0 auto;
+      max-width: 600px;
+    }
+    .movie-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+    .movie-item img {
+      width: 50px;
+      height: auto;
+      margin-right: 10px;
+      border-radius: 5px;
+    }
+    .movie-info {
+      flex-grow: 1;
+    }
+    .movie-title {
+      font-weight: bold;
+    }
+    .download-btn {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container-fluid">
+      <h1>My Movie List</h1>
+    </div>
+  </nav>
+
+  <div class="container movie-list">
+    <div id="movies-list">
+      <!-- Movie list will be injected here by JS -->
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const apiKey = 'b86e5c82'; // Your OMDB API key
+      const movieTitles = [
+        { title: "The Banshees of Inisherin", year: 2022, rating: "7.8", id: "tt11813216" },
+        { title: "The Worst Person in the World", year: 2021, rating: "7.8", id: "tt10365998" },
+        { title: "(500) Days of Summer", year: 2009, rating: "7.7", id: "tt1022603" },
+        { title: "The Imagineering Story", year: 2019, rating: "8.9", id: "tt9331982" },
+        { title: "Roqya", year: 2023, rating: "N/A", id: "N/A" },
+        { title: "Blink Twice", year: 2023, rating: "N/A", id: "N/A" },
+        { title: "Sweet November", year: 2001, rating: "N/A", id: "tt0230838" },
+        { title: "Three Steps Above Heaven", year: 2010, rating: "N/A", id: "tt1648216" },
+        { title: "Gloomy Sunday", year: 1999, rating: "N/A", id: "tt0155722" }
+      ];
+
+      const moviesList = document.getElementById('movies-list');
+
+      movieTitles.forEach(movie => {
+        if (movie.id !== "N/A") {
+          fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${movie.id}&plot=short&r=json`)
+            .then(response => response.json())
+            .then(data => {
+              console.log(data); // For debugging purposes
+              if (data.Response === "True") {
+                const movieItem = `
+                  <div class="movie-item">
+                    <img src="${data.Poster !== "N/A" ? data.Poster : 'https://via.placeholder.com/50'}" alt="${data.Title}">
+                    <div class="movie-info">
+                      <div class="movie-title">${data.Title} (${data.Year})</div>
+                      <div>IMDb Rating: ${data.imdbRating !== "N/A" ? data.imdbRating : "Unavailable"}</div>
+                    </div>
+                    <a href="#" class="btn btn-primary btn-sm download-btn">Download</a>
+                  </div>
+                `;
+                moviesList.innerHTML += movieItem;
+              } else {
+                console.error(`Movie not found: ${movie.title}`);
+              }
+            })
+            .catch(error => {
+              console.error('Error fetching movie data:', error);
+            });
+        } else {
+          // Handle movies with no IMDb ID
+          const movieItem = `
+            <div class="movie-item">
+              <img src="https://via.placeholder.com/50" alt="${movie.title}">
+              <div class="movie-info">
+                <div class="movie-title">${movie.title} (${movie.year})</div>
+                <div>IMDb Rating: ${movie.rating}</div>
+              </div>
+              <a href="#" class="btn btn-primary btn-sm download-btn">Download</a>
+            </div>
+          `;
+          moviesList.innerHTML += movieItem;
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
